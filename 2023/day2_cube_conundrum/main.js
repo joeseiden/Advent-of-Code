@@ -8,7 +8,7 @@ const calculatePossibleGames = (gamesArray) => {
     let possibleGamesSum = 0;
     
     const findMaxOfColor = (game, color) => {
-        const re = new RegExp(`(\\d+) ${color}`, 'g');
+        const re = new RegExp(`(\d+) ${color}`, 'g');
         const max = [...game.matchAll(re)]
                         .map(num => parseInt(num))
                         .reduce((a,b) => Math.max(a, b), -Infinity);
