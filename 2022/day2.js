@@ -1,97 +1,126 @@
 import { readFileSync } from 'fs';
+import { Enumify } from 'enumify';
+import { log } from 'console';
 
 const input = readFileSync('./inputs/day2.txt', 'utf8').split('\n');
 const exampleInput = readFileSync('./inputs/day2_example.txt', 'utf8').split('\n');
 
-// A, X = Rock
-// B, Y = Paper
-// C, Z = Scissors
 
-const winCombos = {
-    'A': 'Y',
-    'B': 'Z',
-    'C': 'X'
-};
+// Part 1
+class Shape extends Enumify {
+    static rock = new Shape(1);
+    static paper = new Shape(2);
+    static scissors = new Shape(3);
+    static _ = this.closeEnum();
 
-const tieCombos = {
-    'A': 'X',
-    'B': 'Y',
-    'C': 'Z'
-};
+    constructor(value) {
+        super();
+        this.value = value;
+    }
+}
 
-const shapePoints = {
-    'X': 1,
-    'Y': 2,
-    'Z': 3
-};
+const shapeFromLetter = (letter) => {
+    if (['A', 'X'].includes(letter)) {
+        return Shape.rock;
+    };
+    if (['B', 'Y'].includes(letter)) {
+        return Shape.paper;
+    }
+    if (['C', 'Z'].includes(letter)) {
+        return Shape.scissors;
+    }
+}
 
 const part1 = (input) => {
     let pointsSum = 0;
     
     input.forEach((game) => {
-        const [opponent, player] = game.split(' ');
-        
+        const [opponent, player] = game.split(' ').map(letter => shapeFromLetter(letter));
         pointsSum += calculateGameScore(opponent, player);
     })
     return pointsSum
 }
 
 const calculateGameScore = (opponent, player) => {
-    if(winCombos[opponent] == player) {
-        return 6 + shapePoints[player]
-    } else if (tieCombos[opponent] == player) {
-        return 3 + shapePoints[player]
-    } else {
-        return 0 + shapePoints[player]
-    }
+  if(
+    player == opponent
+  ) {
+    return 3 + player.value;
+  } else if(
+    (player == Shape.rock && opponent == Shape.scissors) ||
+    (player == Shape.paper && opponent == Shape.rock) ||
+    (player == Shape.scissors && opponent == Shape.paper)
+  )  {
+    return 6 + player.value;
+  } else {
+      return player.value;
+  }
 };
 
 console.log(`Part 1 example solution: ${part1(exampleInput)}`);
 console.log(`Part 1 solution: ${part1(input)}`);
 
-// X = lose, Y = tie, Z = win
-// A > C > B > A
+//Part 2
+class Guide extends Enumify {
+    static win = new Guide();
+    static tie = new Guide();
+    static lose = new Guide();
+    static _ = this.closeEnum();
 
-const guideTable = {
-    'A': {
-        win: 'B',
-        lose: 'C'
-    },
-    'B': {
-        win: 'C',
-        lose: 'A'
-    },
-    'C': {
-        win: 'A',
-        lose: 'B'
+    constructor() {
+        super();
     }
 }
 
-const shapePoints2 = {
-    'A': 1,
-    'B': 2,
-    'C': 3
+const guideFromLetter = (letter) => {
+    if(letter == 'X') {
+        return Guide.lose;
+    }
+    if(letter == 'Y') {
+        return Guide.tie;
+    }
+    if(letter == 'Z') {
+        return Guide.win;
+    }
+ }
+
+const shapeToPick = {
+    [Shape.rock]: {
+        [Guide.lose]: Shape.scissors,
+        [Guide.win]: Shape.paper
+    },
+    [Shape.paper]: {
+        [Guide.lose]: Shape.rock,
+        [Guide.win]: Shape.scissors
+    },
+    [Shape.scissors]: {
+        [Guide.lose]: Shape.paper,
+        [Guide.win]: Shape.rock
+    }
 }
 
 const part2 = (input) => {
     let pointsSum = 0;
 
     input.forEach((game) => {
-        const [opponent, guide] = game.split(' ');
-
+        const [opponent, guide] = game.split(' ').map((letter) => {
+            if('ABC'.includes(letter)) {
+                return shapeFromLetter(letter);
+            } else if ('XYZ'.includes(letter)) {
+                return guideFromLetter(letter);
+            }
+        });
         pointsSum += followGuide(opponent, guide);
     })
     return pointsSum;
 };
 
 const followGuide = (opponent, guide) => {
-    if(guide == 'Z') {
-        return 6 + shapePoints2[guideTable[opponent].win];
-    } else if (guide == 'Y') {
-        return 3 + shapePoints2[opponent];
-    } else if (guide == 'X') {
-        return shapePoints2[guideTable[opponent].lose]
+    if(guide == Guide.tie) {
+        return calculateGameScore(opponent, opponent);
     }
+
+    return calculateGameScore(opponent, shapeToPick[opponent][guide])
 };
 
 console.log(`Part 2 example solution: ${part2(exampleInput)}`);
