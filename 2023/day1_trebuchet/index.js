@@ -1,18 +1,6 @@
 const largeInput = require('./input.js');
 
 const NUMBERS = '1234567890';
-const SPELLED_NUMBERS = {
-    'one': '1',
-    'two': '2',
-    'three': '3', 
-    'four': '4', 
-    'five': '5', 
-    'six': '6', 
-    'seven': '7', 
-    'eight': '8', 
-    'nine': '9', 
-    'zero': '0'
-}; 
 
 const calculateCalibrationValue = (input) => {
     const parsedInput = input.split('\n');
