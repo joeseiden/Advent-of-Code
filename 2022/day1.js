@@ -1,5 +1,4 @@
 import { readFileSync } from "fs";
-import { parse } from "path";
 
 const input = readFileSync('./inputs/day1.txt', 'utf8');
 const inputArray = input.split('\n\n');
