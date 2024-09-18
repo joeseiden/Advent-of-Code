@@ -1,4 +1,5 @@
 import { readFileSync } from "fs";
+import _ from "lodash";
 
 const inputArray = readFileSync('./inputs/day3.txt', 'utf8').split('\n');
 const exampleInputArray = readFileSync('./inputs/day3_example.txt', 'utf8').split('\n');
@@ -9,23 +10,24 @@ const splitRucksack = (rucksack) => {
     return [rucksack.slice(0, rucksack.length / 2), rucksack.slice(rucksack.length / 2)];
 };
 
+const priorityValue = (char) => {
+    return priority.indexOf(char) + 1;
+}
+
 const part1 = (rucksackArray) => {
     let sum = 0;
     rucksackArray.forEach((rucksack) => {
-        sum += findPriorityValue(rucksack);
+        sum += findDupeValue(rucksack);
     })
     return sum;
 }
 
-const findPriorityValue = (rucksack) => {
-    const [firstComp, secondComp] = splitRucksack(rucksack);
-
-    const firstCompSet = new Set(firstComp.split(''));
-    const secondCompSet = new Set(secondComp.split(''));
+const findDupeValue = (rucksack) => {
+    const [firstComp, secondComp] = splitRucksack(rucksack).map(compartment => compartment.split(''));
     
-    const dupe = firstCompSet.intersection(secondCompSet).values().next().value;
+    const dupe = _.intersection(firstComp, secondComp)[0];
     
-    return priority.indexOf(dupe) + 1;
+    return priorityValue(dupe);
 };
 
 console.log(`Part 1 example input solution: ${part1(exampleInputArray)}`);
@@ -40,10 +42,11 @@ const part2 = (rucksackArray) => {
 };
 
 const findGroupPriorityValue = (elfGroup) => {
-    const [firstElfSet, secondElfSet, thirdElfSet] = elfGroup.map(rucksack => new Set(rucksack.split('')));
+    const [firstElf, secondElf, thirdElf] = elfGroup.map(rucksack => rucksack.split(''));
 
-    const groupBadge = firstElfSet.intersection(secondElfSet).intersection(thirdElfSet).values().next().value;
-    return priority.indexOf(groupBadge) + 1;
+    const groupBadge = _.intersection(firstElf, secondElf, thirdElf)[0];
+    
+    return priorityValue(groupBadge);
 }
 
 console.log(`Part 2 example input solution: ${part2(exampleInputArray)}`);
