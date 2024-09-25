@@ -7,7 +7,12 @@ const exampleInput = readFileSync('./inputs/day9_example.txt', 'utf8')
         return [arr[0], parseInt(arr[1])]
     });
 
-const exampleInput2 = readFileSync
+const exampleInput2 = readFileSync('./inputs/day9_example2.txt', 'utf8')
+.split('\n')
+.map(row => { 
+    const arr = row.split(' ');
+    return [arr[0], parseInt(arr[1])]
+});
 
 const input = readFileSync('./inputs/day9.txt', 'utf8')
     .split('\n')
@@ -49,10 +54,10 @@ const moveHead = (head, tail, instruction) => {
             newHead = [newHead[0], newHead[1] - 1];
         }
         if(direction == 'U') {
-            newHead = [newHead[0] - 1, newHead[1]];
+            newHead = [newHead[0] + 1, newHead[1]];
         }
         if(direction == 'D') {
-            newHead = [newHead[0] + 1, newHead[1]];
+            newHead = [newHead[0] - 1, newHead[1]];
         }
         newTail = moveTail(newHead, newTail);
         
@@ -94,8 +99,86 @@ const isDiagonallyAdjacent = (a, b) => {
 console.log(`Part 1 example solution: ${part1(exampleInput)}`);
 console.log(`Part 1 solution: ${part1(input)}`);
 
+const moveRope = (rope, instruction) => {
+    let head = rope[0];
+    const [direction, distance] = instruction;
+    let movesRemaining = distance;
+    const visitedLocations = [];
+    
+    while(movesRemaining > 0) {
+        if(direction === 'R') {
+            head = [head[0], head[1] + 1];
+        }
+        if(direction === 'L') {
+            head = [head[0], head[1] - 1];
+        }
+        if(direction === 'U') {
+            head = [head[0] + 1, head[1]];
+        }
+        if(direction === 'D') {
+            head = [head[0] - 1, head[1]];
+        }
+        
+        rope = moveRopeSegment([head, ...rope.slice(1)]);
+        
+        visitedLocations.push(rope.at(-1));
+        
+        movesRemaining--;
+    }
+    
+    return [rope, visitedLocations]
+}
+
+const moveRopeSegment = (rope) => {
+    if(rope.length == 1) {
+        return [rope[0]];
+    }
+    let head = rope[0];
+    let next = rope[1];
+
+    if(isDiagonallyAdjacent(head, next)) {
+        return [head, ...moveRopeSegment([next, ...rope.slice(2)])];
+    } else if (Math.abs(head[0] - next[0]) > 1 || Math.abs(head[1] - next[1]) > 1) { //tail needs to move
+        let row = next[0];
+        let column = next[1];
+        if(head[1] - next[1] > 0) {
+            column += 1;
+        }
+        if(head[1] - next[1] < 0) {
+            column -= 1;
+        }
+        if(head[0] - next[0] > 0) {
+            row += 1;
+        }
+        if(head[0] - next[0] < 0) {
+            row -= 1;
+        }
+        
+        next = [row, column]
+        
+        return [head, ...moveRopeSegment([next, ...rope.slice(2)])];
+    }
+}
+
+const part2 = (input) => {
+    const visitedLocations = new Set();
+    let rope = new Array();
+    for(let i = 0; i < 10; i++) {
+        rope.push([0,0]);
+    };
+
+    input.forEach((instruction) => {  
+        const [newRope, newVisitedLocations] = moveRope(rope, instruction);
+        
+        rope = newRope;
+        newVisitedLocations.map(JSON.stringify).forEach((location) => {
+            visitedLocations.add(location);
+        })        
+    })
+    return visitedLocations.size;
+}
 
 
 
-console.log(`Part 2 example solution: ${part2(exampleInput)}`);
+console.log(`Part 2 example solution: ${part2(exampleInput2)}`);
 console.log(`Part 2 solution: ${part2(input)}`);
