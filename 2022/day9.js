@@ -160,11 +160,11 @@ const moveRopeSegment = (rope) => {
     }
 }
 
-const part2 = (input) => {
+const part2 = (input, ropeLength = 10) => {
     const visitedLocations = new Set();
-    let rope = new Array();
-    for(let i = 0; i < 10; i++) {
-        rope.push([0,0]);
+    let rope = new Array(ropeLength);
+    for(let i = 0; i < rope.length; i++) {
+        rope[i] = [0,0];
     };
 
     input.forEach((instruction) => {  
