@@ -3,6 +3,7 @@
   "dependencies": {
     "enumify": "^2.0.0",
     "fs": "^0.0.1-security",
-    "lodash": "^4.17.21"
+    "lodash": "^4.17.21",
+    "mathjs": "^13.1.1"
   }
 }
