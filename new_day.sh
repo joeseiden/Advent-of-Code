@@ -15,6 +15,7 @@ if ! [[ "$DAY" =~ ^[0-9]+$ ]] || [ "$DAY" -lt 1 ] || [ "$DAY" -gt 25 ]; then
     exit 1
 fi
 
+
 # Create the inputs directory if it doesn't exist
 mkdir -p "$TARGET_DIR/inputs"
 
@@ -23,6 +24,7 @@ touch "$TARGET_DIR/inputs/day${DAY}_example.txt"
 touch "$TARGET_DIR/inputs/day${DAY}.txt"
 touch "$TARGET_DIR/day${DAY}.js"
 
+# Add boilerplate to the JavaScript file
 cat <<EOL > "$TARGET_DIR/day${DAY}.js"
 import { readFileSync } from "fs";
 
