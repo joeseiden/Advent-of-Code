@@ -22,7 +22,7 @@ const part2 = (input) => {
     let increaseCount = 0;
     let prevSum = Infinity;
     for(let i = 2; i < input.length; i++) {
-        const windowSum = [input[i - 2], input[i - 1], input[i]].reduce((a, b) => a + b);
+        const windowSum = input[i - 2] + input[i - 1] + input[i];
         if(windowSum > prevSum) {
             increaseCount++
         };
