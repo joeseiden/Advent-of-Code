@@ -32,9 +32,32 @@ const part1 = (input) => {
 console.log(`Part 1 example solution: ${part1(exampleInput)}`);
 console.log(`Part 1 solution: ${part1(input)}`);
 
-// const part2 = (input) => {
-//     return true;
-// }
+const part2 = (input) => {
+    let horiPos = 0;
+    let depth = 0;
+    let aim = 0;
 
-// console.log(`Part 2 example solution: ${part2(exampleInput)}`);
-// console.log(`Part 2 solution: ${part2(input)}`);
+    input.forEach((line) => {
+        const direction = line[0];
+        const x = parseInt(line[1]);
+        switch (direction) {
+            case 'forward':
+                horiPos += x;
+                depth += (aim * x);
+                break;
+            case 'down':
+                aim += x;
+                break;
+            case 'up':
+                aim -= x;
+                break;
+            default:
+                break;
+        }
+    })
+    
+    return horiPos * depth;
+}
+
+console.log(`Part 2 example solution: ${part2(exampleInput)}`);
+console.log(`Part 2 solution: ${part2(input)}`);
