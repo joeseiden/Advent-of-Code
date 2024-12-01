@@ -1,4 +1,5 @@
 import { readFileSync } from "fs";
+import { sum } from '../lib/index.js';
 import _ from 'lodash';
 
 const exampleInput = readFileSync('./inputs/day1_example.txt', 'utf8');
@@ -14,7 +15,7 @@ const part1 = (input) => {
     const sortedZipList = zippedList.map(subArr => subArr.sort());
     const sortedPairs = _.zip(...sortedZipList);
     const distances = sortedPairs.map(pair => Math.abs(pair[0] - pair[1]));
-    const totalDistance = distances.reduce((a, b) => a + b);
+    const totalDistance = sum(distances)
     
     return totalDistance;
 }
@@ -27,7 +28,7 @@ const part2 = (input) => {
     const list = parseInput(input);
     const [leftList, rightList] = _.zip(...list);
     const rightListOccurences = _.countBy(rightList);
-    const similarityScore = leftList.map(num => num * rightListOccurences[num] || 0).reduce((a ,b) => a + b);
+    const similarityScore = sum(leftList.map(num => num * rightListOccurences[num] || 0));
     
     return similarityScore;
 }
