@@ -17,8 +17,8 @@ const retrieveMulFactors = (mulCommand) => {
     return splitAndParseInt([...mulCommand.matchAll(factorsRegex)].map(factor => factor[0])[0]);
 }
 
-const mulRegex = /mul\(\d+,\d+\)/g;
-const factorsRegex = /\d+,\d+/g;
+const mulRegex = /mul\(\d{1,3},\d{1,3}\)/g;
+const factorsRegex = /\d{1,3},\d{1,3}/g;
 
 const part1 = (input) => {
     const inputString = parseInput(input);
@@ -35,7 +35,7 @@ const part1 = (input) => {
 console.log(`Part 1 example solution: ${part1(exampleInput)}`);
 console.log(`Part 1 solution: ${part1(input)}`);
 
-const mulOrDoOrDontRegex = /mul\(\d+,\d+\)|do\(\)|don't\(\)/g
+const mulOrDoOrDontRegex = /mul\(\d{1,3},\d{1,3}\)|do\(\)|don't\(\)/g
 
 const part2 = (input) => {
     const inputString = parseInput(input);
