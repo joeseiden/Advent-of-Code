@@ -42,14 +42,14 @@ const part2 = (input) => {
 
     const allCommands = retrieveCommands(inputString, mulOrDoOrDontRegex);
     const mulFactors = [];
-    let dontMul = false
+    let active = true;
     allCommands.forEach(command => {
-        if(!dontMul && command.includes('mul')) {
+        if(active && command.includes('mul')) {
             mulFactors.push(retrieveMulFactors(command));
         } else if (command == "don't()") {
-            dontMul = true;
+            active = false;
         } else if (command == "do()") {
-            dontMul = false;
+            active = true;
         }
     })
 
