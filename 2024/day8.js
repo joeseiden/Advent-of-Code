@@ -68,6 +68,33 @@ const part1 = (input) => {
 console.log(`Part 1 example solution: ${part1(exampleInput)}`);
 console.log(`Part 1 solution: ${part1(input)}`);
 
+const addOffset = (arr, offset) => {
+    return _.zipWith(arr, offset, (a,b) => a + b);
+}
+
+const findPart2Antinodes = (antennaCoords, gridDim) => {
+    const antinodes = [];
+
+    for (let i = 0; i < antennaCoords.length; i++) {
+        for (let j = i + 1; j < antennaCoords.length; j++) {
+            const ant1 = antennaCoords[i];
+            const ant2 = antennaCoords[j];
+            const offset = [ant2[0] - ant1[0], ant2[1] - ant1[1]];
+            antinodes.push(ant1, ant2);
+ 
+            [-1, 1].forEach(dir => {
+                const offsetVector = offset.map(x => x * dir);
+                let currentCoord = addOffset(ant1, offsetVector);
+                while (isInbounds(currentCoord, gridDim)) {
+                    antinodes.push(currentCoord);
+                    currentCoord = addOffset(currentCoord, offsetVector)
+                }
+            })
+        }     
+    }
+    return antinodes;
+}
+
 const part2 = (input) => {
     const [antennas, gridDim] = parseInput(input);
     const allAntinodes = []
@@ -82,4 +109,4 @@ const part2 = (input) => {
 }
 
 console.log(`Part 2 example solution: ${part2(exampleInput)}`);
-// console.log(`Part 2 solution: ${part2(input)}`);
+console.log(`Part 2 solution: ${part2(input)}`);
