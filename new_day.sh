@@ -6,7 +6,7 @@ if [ "$#" -ne 2 ]; then
     exit 1
 fi
 echo $PWD
-TARGET_DIR="($PWD)/$1"
+TARGET_DIR="$PWD/$1"
 DAY="$2"
 
 # Validate that DAY is a number between 1 and 31
