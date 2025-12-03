@@ -5,8 +5,8 @@ if [ "$#" -ne 2 ]; then
     echo "Usage: $0 <directory> <day>"
     exit 1
 fi
-
-TARGET_DIR="/home/jseiden/advent_of_code/$1"
+echo $PWD
+TARGET_DIR="($PWD)/$1"
 DAY="$2"
 
 # Validate that DAY is a number between 1 and 31
