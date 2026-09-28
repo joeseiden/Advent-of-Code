@@ -1,5 +1,4 @@
 import { readFileSync } from 'fs';
-import { skip } from 'node:test';
 
 const largeInput = readFileSync('./input.txt', 'utf8');
 const exampleInput = readFileSync('./example.txt', 'utf8');
